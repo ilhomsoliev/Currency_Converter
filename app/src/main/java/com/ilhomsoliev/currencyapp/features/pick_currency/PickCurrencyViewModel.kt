@@ -11,7 +11,7 @@ import javax.inject.Inject
 @HiltViewModel
 class PickCurrencyViewModel @Inject constructor(
     val dataStoreManager: DataStoreManager,
-    private val currenciesDao: CurrenciesDao,
+    val currenciesDao: CurrenciesDao,
 ) : ViewModel() {
     private val _state = MutableStateFlow(PickCurrencyState())
     val state = _state.stateIn(

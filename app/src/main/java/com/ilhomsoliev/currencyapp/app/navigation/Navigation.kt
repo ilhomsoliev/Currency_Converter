@@ -69,6 +69,9 @@ fun Navigation() {
                                     viewModel.dataStoreManager.updateToCurrency(it.id)
                                 }
                             }
+                            var currency = viewModel.currenciesDao.getCurrencyById(it.id)
+                            currency = currency?.copy(editedAt = System.currentTimeMillis())
+                            currency?.let { it1 -> viewModel.currenciesDao.update(it1) }
                             navController.popBackStack()
                         }
                     }

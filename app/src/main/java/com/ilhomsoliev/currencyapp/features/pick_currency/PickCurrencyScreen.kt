@@ -99,7 +99,7 @@ fun PickCurrencyScreen(
                 }
                 resultList
             }
-            items(filteredItems) {
+            items(filteredItems.sortedBy { it.editedAt }.reversed()) {
                 CurrencyItem(currencyName = it.name, currencyInitials = it.initials, onClick = {
                     onEvent(
                         PickCurrencyEvent.OnItemClick(it.id!!)

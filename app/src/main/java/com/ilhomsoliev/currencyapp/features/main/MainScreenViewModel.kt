@@ -51,7 +51,8 @@ class MainScreenViewModel @Inject constructor(
                             it.copy(
                                 fromCurrencyIni = fromCurrency?.initials,
                                 fromCurrencySymbol = Helper.getAllCurrencies()
-                                    .filter { it.initials == fromCurrency?.initials }[0].countryFlagLink
+                                    .filter { it.initials == fromCurrency?.initials }[0].countryFlagLink,
+                                fromCurrencyId = currencyId,
                             )
                         }
                         getCurrency()
@@ -71,7 +72,8 @@ class MainScreenViewModel @Inject constructor(
                             it.copy(
                                 toCurrencyIni = toCurrency?.initials,
                                 toCurrencySymbol = Helper.getAllCurrencies()
-                                    .filter { it.initials == toCurrency?.initials }[0].countryFlagLink
+                                    .filter { it.initials == toCurrency?.initials }[0].countryFlagLink,
+                                toCurrencyId = currencyId,
                             )
                         }
                         getCurrency()
@@ -125,17 +127,27 @@ class MainScreenViewModel @Inject constructor(
                         toCurrencyAmount = _state.value.fromCurrencyAmount1,
                         toCurrencyIni = _state.value.fromCurrencyIni,
                         toCurrencySymbol = _state.value.fromCurrencySymbol,
+                        fromCurrencyId = _state.value.toCurrencyId,
+                        toCurrencyId = _state.value.fromCurrencyId,
                         fromCurrencyAmount2 = "",
-                        exchangeRate = 1f / _state.value.exchangeRate,
+                        //        exchangeRate = 1f / _state.value.exchangeRate,
                         operation = null
                     )
                 }
+                viewModelScope.launch {
+                    _state.value.fromCurrencyId?.let { dataStoreManager.updateFromCurrency(it) }
+                    _state.value.toCurrencyId?.let { dataStoreManager.updateToCurrency(it) }
+
+                }
+
+                getCurrency()
             }
             else -> Unit
         }
     }
 
     private fun getCurrency() {
+        if (state.value.fromCurrencyIni == state.value.toCurrencyIni) return
         state.value.fromCurrencyIni?.let { fromCurrencyIni ->
             state.value.toCurrencyIni?.let { toCurrencyIni ->
                 getCurrencyUseCase(
