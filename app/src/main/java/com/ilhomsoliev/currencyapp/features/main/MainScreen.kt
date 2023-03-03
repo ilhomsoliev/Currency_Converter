@@ -85,6 +85,12 @@ fun MainScreen(
             isLoading = state.isLoading,
             lateUpdate = state.lastUpdateTime?.toTimeHoursAndMinutes() ?: "",
             currencyExchangeRate = "1 ${state.fromCurrencyIni?.uppercase()} = ${state.exchangeRate} ${state.toCurrencyIni?.uppercase()}",
+            textToCopy = (if (state.fromCurrencyAmount2.isNotEmpty()) (state.fromCurrencyAmount2.toDouble() * state.exchangeRate)
+            else if (state.fromCurrencyAmount1.isNotEmpty()) (state.fromCurrencyAmount1.toDouble() * state.exchangeRate)
+            else "0").toString(),
+            onPasteClick = { text ->
+                onEvent(MainEvent.OnPasteAmount(text))
+            },
             onRefreshClick = {
                 onEvent(MainEvent.Refresh)
             })

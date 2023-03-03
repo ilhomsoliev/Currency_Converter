@@ -107,6 +107,15 @@ class MainScreenViewModel @Inject constructor(
             is MainEvent.Operation -> enterOperation(event.operation)
             is MainEvent.Decimal -> enterDecimal()
             is MainEvent.Calculate -> calculate()
+            is MainEvent.OnPasteAmount -> {
+                _state.update {
+                    it.copy(
+                        fromCurrencyAmount1 = event.text,
+                        fromCurrencyAmount2 = "",
+                        operation = null,
+                    )
+                }
+            }
             is MainEvent.ReverseCurrencies -> {
                 _state.update {
                     it.copy(
